@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "444833775471",
+    "firebase_url": "https://forex-app-4031c.firebaseio.com",
+    "project_id": "forex-app-4031c",
+    "storage_bucket": "forex-app-4031c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444833775471:android:43ddd8e21adb749ab4f29a",
+        "android_client_info": {
+          "package_name": "com.snxjj25.forex_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444833775471-g5madrncb6lc7l90g8uqijbkqldg43v6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTxVIiWW_8Mjzm_-LDwDRLed8LqYl_6ko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "444833775471-g5madrncb6lc7l90g8uqijbkqldg43v6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
