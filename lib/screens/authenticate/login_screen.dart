@@ -2,9 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import '../../models/user.dart';
 import '../../screens/wrapper.dart';
-import 'package:global_configuration/global_configuration.dart';
 
 import '../../services/auth.service.dart';
 import './register_screen.dart';
@@ -180,33 +178,50 @@ class _SignInFormState extends State<SignInForm> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
+                  // !     Login function ===============
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
                       setState(() {
                         isLoading = true;
                       });
-                      User result = await _auth
+                      await _auth
                           .signInWithEmailAndPassword(email, password)
                           .catchError((err) {
-                        print("error code: 110");
-                        print(err);
-                      });
-                      GlobalConfiguration().addValue("uid", result.uid);
-                      print("global uid added");
-                      if (result == null) {
+                        showDialog(
+                            context: context,
+                            child: AlertDialog(
+                              title: Text("Error"),
+                              content: Text(err.toString()),
+                            ));
                         setState(() {
-                          error = "Could not sign in with those credentials";
                           isLoading = false;
                         });
-                      }
-                      setState(() {
-                        isLoading = false;
-                      });
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => Wrapper(),
-                        ),
-                      );
+                      }).then((user) => {
+                                if (user == null)
+                                  {
+                                    setState(() {
+                                      isLoading = false;
+                                    })
+                                  }
+                                else
+                                  {
+                                    setState(() {
+                                      isLoading = false;
+                                    }),
+                                    Navigator.of(context)
+                                        .pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (context) => Wrapper(),
+                                          ),
+                                        )
+                                        .catchError(
+                                          (err) => {print(err)},
+                                        )
+                                        .then(
+                                          (_) => {print("navigated to ...")},
+                                        ),
+                                  }
+                              });
                     }
                   },
                 ),

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:forex_app/screens/home_screen/home_screen.dart';
-import 'package:global_configuration/global_configuration.dart';
-
+import 'package:provider/provider.dart';
 import 'app_settings.config.dart';
+import 'package:global_configuration/global_configuration.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../models/user.dart';
+import '../../shared/app_drawer.dart';
+import '../posts/new_post_helpers/video_post.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const String routeName = "/settings-screen";
@@ -29,20 +32,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final UserData userData = Provider.of<UserData>(context);
     return Scaffold(
-      backgroundColor: _colorScheme == "dark" ? null : Colors.grey.shade200,
       appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pushNamed(HomeScreen.routeName);
-            }),
         iconTheme: IconThemeData(
             color: _colorScheme == "dark" ? Colors.white : Colors.black),
         elevation: 0,
         brightness: _colorScheme == "dark" ? Brightness.dark : Brightness.light,
         backgroundColor:
-            _colorScheme == "dark" ? Colors.indigo[900] : Colors.grey[400],
+            _colorScheme == "dark" ? Colors.black : Colors.grey[400],
         title: Text(
           'Settings',
           style: TextStyle(
@@ -74,6 +72,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           )
         ],
       ),
+      drawer:
+          AppDrawer(userData: userData, colorScheme: colorScheme, active: 3),
       body: Container(
         decoration: BoxDecoration(
           gradient: _colorScheme == "dark"

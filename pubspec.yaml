@@ -45,6 +45,9 @@ dev_dependencies:
   chewie: ^0.9.10
   font_awesome_flutter: ^8.8.1
   shared_preferences: ^0.5.10
+  youtube_player_flutter: ^7.0.0+7
+  full_screen_image: ^1.0.2
+  syncfusion_flutter_charts: ^18.3.51
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

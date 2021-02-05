@@ -22,8 +22,8 @@ class AuthService {
       GlobalConfiguration().addValue("uid", user.uid);
       return _userFromFirebaseUser(user);
     } catch (err) {
-      print(err.toString());
-      return null;
+      print("Error logging in: " + err.toString());
+      throw err;
     }
   }
 
@@ -36,8 +36,8 @@ class AuthService {
       GlobalConfiguration().addValue("uid", user.uid);
       return _userFromFirebaseUser(user);
     } catch (err) {
-      print(err.toString());
-      return null;
+      print("Error registering: " + err.toString());
+      throw err;
     }
   }
 
@@ -45,7 +45,7 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (err) {
-      print(err.toString());
+      print("Error signing out: " + err.toString());
       return null;
     }
   }

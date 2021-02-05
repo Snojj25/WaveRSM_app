@@ -1,8 +1,9 @@
 import 'dart:io';
 
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:file_picker/file_picker.dart';
+
+import 'package:forex_app/models/trade.model.dart';
 
 Future<File> getImageFile() async {
   final File imageFile = await FilePicker.getFile();
@@ -139,21 +140,3 @@ Trade makeTrade(List<String> tradeInfo) {
 }
 
 /////////////////////////////////////////////////////////////
-class Trade {
-  final String symbol;
-  final String tradeType;
-  final double lotSize;
-  final double entry;
-  final double exit;
-  final DateTime dateTime;
-  final double profit;
-
-  Trade(
-      {@required this.symbol,
-      @required this.tradeType,
-      @required this.lotSize,
-      @required this.entry,
-      @required this.exit,
-      @required this.dateTime,
-      @required this.profit});
-}

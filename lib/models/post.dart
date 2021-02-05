@@ -6,7 +6,8 @@ class Post {
   final String description;
   final String imgUrl;
   final DateTime dateTime;
-  final List<dynamic> allowedUsers;
+  final String symbol;
+  // final List<dynamic> allowedUsers;
 
   Post({
     @required this.id,
@@ -14,6 +15,7 @@ class Post {
     @required this.description,
     @required this.imgUrl,
     @required this.dateTime,
-    this.allowedUsers,
+    @required this.symbol,
+    // this.allowedUsers,
   });
 }

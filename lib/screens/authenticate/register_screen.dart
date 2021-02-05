@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 
 import '../../screens/wrapper.dart';
-import '../../models/user.dart';
 import '../../services/auth.service.dart';
 import '../../services/database.service.dart';
 import './login_screen.dart';
@@ -51,23 +50,6 @@ class _RegisterProfileScreenState extends State<RegisterProfileScreen> {
   }
 }
 
-// ==============================================
-// // ==============================================
-// class RegisterTitle extends StatelessWidget {
-//   const RegisterTitle({Key key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Text(
-//         "Create account",
-//         textAlign: TextAlign.center,
-//         textScaleFactor: 3,
-//       ),
-//     );
-//   }
-// }
-
 // * ==================================================
 // * ==================================================
 
@@ -91,7 +73,7 @@ class RegisterTitle extends StatelessWidget {
                 colors: [Colors.indigo[900], Colors.grey[900]],
                 begin: Alignment.bottomLeft)),
         child: Text(
-          'register',
+          'Register',
           softWrap: false,
           overflow: TextOverflow.visible,
           style: TextStyle(
@@ -205,34 +187,47 @@ class _RegisterFormState extends State<RegisterForm> {
                       setState(() {
                         isLoading = true;
                       });
-                      User result = await _auth
+                      await _auth
                           .registerWithEmailAndPassword(
                               _emailController.text, _passwordController.text)
                           .catchError((err) {
-                        print(err.toString());
-                      });
-                      print(result);
-                      if (result == null) {
                         setState(() {
                           isLoading = false;
-                          AlertDialog(
-                            title: Text(
-                              "Somtehing went wrong",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          );
                         });
-                      }
-                      await DataBaseServce().setUserData(
-                          result.uid,
-                          _nameController.text,
-                          _emailController.text,
-                          _passwordController.text);
-                      GlobalConfiguration().addValue("uid", result.uid);
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (ctx) => Wrapper()),
-                      );
-                      return result;
+                        showDialog(
+                            context: context,
+                            child: AlertDialog(
+                              title: Text("Error"),
+                              content: Text(err.toString()),
+                            ));
+                      }).then((user) => {
+                                if (user == null)
+                                  {
+                                    setState(() {
+                                      isLoading = false;
+                                    }),
+                                    AlertDialog(
+                                      title: Text(
+                                        "Somtehing went wrong",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    )
+                                  }
+                                else
+                                  {
+                                    DataBaseService().setUserData(
+                                        user.uid,
+                                        _nameController.text,
+                                        _emailController.text,
+                                        _passwordController.text),
+                                    GlobalConfiguration()
+                                        .addValue("uid", user.uid),
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (ctx) => Wrapper()),
+                                    )
+                                  }
+                              });
                     }
                   },
                 ),
