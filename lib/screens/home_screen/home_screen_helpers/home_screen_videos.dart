@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:forex_app/screens/posts/post-detail/video_post_detail.dart';
 import '../../../models/post.dart';
 import '../../../services/database.service.dart';
-import '../../../shared/video_player.dart';
+// import '../../../shared/video_player.dart';
 
 class HomeScreenVideos extends StatefulWidget {
   HomeScreenVideos({Key key, this.colorScheme}) : super(key: key);
@@ -15,32 +15,23 @@ class HomeScreenVideos extends StatefulWidget {
 class _HomeScreenVideosState extends State<HomeScreenVideos> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: widget.colorScheme == "dark"
-              ? [Colors.indigo[900], Colors.grey[900]]
-              : [Colors.grey[500], Colors.white],
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(15),
-            alignment: Alignment.center,
-            child: Text(
-              "ANALYSES",
-              textScaleFactor: 1.7,
-              style: TextStyle(
-                  color: widget.colorScheme == "dark"
-                      ? Colors.grey[300]
-                      : Colors.indigo[900]),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(15),
+          alignment: Alignment.center,
+          child: Text(
+            "ANALYSES",
+            textScaleFactor: 1.7,
+            style: TextStyle(
+                color: widget.colorScheme == "dark"
+                    ? Colors.grey[300]
+                    : Colors.indigo[900]),
           ),
-          Expanded(child: AnalysesList()),
-        ],
-      ),
+        ),
+        Expanded(child: AnalysesList()),
+      ],
     );
   }
 }
@@ -123,8 +114,9 @@ class _VideoContainerState extends State<VideoContainer> {
           title: Text(widget.post.title),
         ),
         Container(
-          // color: Colors.red,
-          child: CustomVideoPlayer(),
+          color: Colors.red,
+          child: Text("HELLO"),
+          // child: CustomVideoPlayer(),
         ),
         ListTile(
           onTap: () {

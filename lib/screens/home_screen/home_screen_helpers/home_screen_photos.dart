@@ -13,114 +13,25 @@ class HomeScreenPhotos extends StatefulWidget {
 }
 
 class _HomeScreenPhotosState extends State<HomeScreenPhotos> {
-  bool isModalOpen = false;
-
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: widget.colorScheme == "dark"
-              ? [Colors.indigo[900], Colors.grey[900]]
-              : [Colors.grey[500], Colors.white],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(15),
+          alignment: Alignment.center,
+          child: Text(
+            "ANALYSES",
+            textScaleFactor: 1.7,
+            style: TextStyle(
+                color: widget.colorScheme == "dark"
+                    ? Colors.grey[300]
+                    : Colors.indigo[900]),
+          ),
         ),
-      ),
-      child: Stack(
-        children: [
-          Container(
-            foregroundDecoration: isModalOpen
-                ? BoxDecoration(color: Color.fromRGBO(0, 0, 0, 0.5))
-                : null,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(15),
-                  alignment: Alignment.center,
-                  child: Text(
-                    "ANALYSES",
-                    textScaleFactor: 1.7,
-                    style: TextStyle(
-                        color: widget.colorScheme == "dark"
-                            ? Colors.grey[300]
-                            : Colors.indigo[900]),
-                  ),
-                ),
-                Expanded(child: AnalysesList()),
-              ],
-            ),
-          ),
-          Positioned(
-            top: 8,
-            right: 27,
-            child: AnimatedContainer(
-              // width: isModalOpen ? 0.2 * width : 0.0,
-              width: 0.18 * width,
-              height: isModalOpen ? 0.5 * height : 0.0,
-              decoration: BoxDecoration(
-                color: isModalOpen ? Colors.indigo[800] : Colors.black,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              duration: Duration(seconds: 1),
-              curve: Curves.decelerate,
-              child: isModalOpen
-                  ? Wrap(
-                      runAlignment: WrapAlignment.center,
-                      alignment: WrapAlignment.center,
-                      direction: Axis.vertical,
-                      spacing: 25,
-                      children: [
-                        IconButton(
-                            icon: Icon(Icons.gavel,
-                                color: Colors.white, size: 40),
-                            onPressed: () {
-                              print("pressed");
-                            }),
-                        IconButton(
-                            icon: Icon(Icons.fastfood,
-                                color: Colors.white, size: 40),
-                            onPressed: () {
-                              print("pressed");
-                            }),
-                        IconButton(
-                            icon: Icon(Icons.outlined_flag,
-                                color: Colors.white, size: 40),
-                            onPressed: () {
-                              print("pressed");
-                            }),
-                      ],
-                    )
-                  : null,
-            ),
-          ),
-          Positioned(
-            top: 8,
-            right: 20,
-            child: RawMaterialButton(
-              onPressed: () {
-                setState(() {
-                  isModalOpen = !isModalOpen;
-                });
-              },
-              elevation: 2.0,
-              fillColor: Colors.white,
-              child: Icon(
-                isModalOpen
-                    ? Icons.keyboard_arrow_up
-                    // : Icons.keyboard_arrow_down,
-                    // : Icons.clear_all,
-                    : Icons.dehaze,
-                size: 40.0,
-                color: Colors.black,
-              ),
-              padding: EdgeInsets.all(10.0),
-              shape: CircleBorder(),
-            ),
-          ),
-        ],
-      ),
+        Expanded(child: AnalysesList()),
+      ],
     );
   }
 }
@@ -247,3 +158,71 @@ String checkLength(String string) {
 //     return true;
 //   }
 // }
+
+// Positioned(
+//             top: 8,
+//             right: 27,
+//             child: AnimatedContainer(
+//               // width: isModalOpen ? 0.2 * width : 0.0,
+//               width: 0.18 * width,
+//               height: isModalOpen ? 0.5 * height : 0.0,
+//               decoration: BoxDecoration(
+//                 color: isModalOpen ? Colors.indigo[800] : Colors.black,
+//                 borderRadius: BorderRadius.circular(20),
+//               ),
+//               duration: Duration(seconds: 1),
+//               curve: Curves.decelerate,
+//               child: isModalOpen
+//                   ? Wrap(
+//                       runAlignment: WrapAlignment.center,
+//                       alignment: WrapAlignment.center,
+//                       direction: Axis.vertical,
+//                       spacing: 25,
+//                       children: [
+//                         IconButton(
+//                             icon: Icon(Icons.gavel,
+//                                 color: Colors.white, size: 40),
+//                             onPressed: () {
+//                               print("pressed");
+//                             }),
+//                         IconButton(
+//                             icon: Icon(Icons.fastfood,
+//                                 color: Colors.white, size: 40),
+//                             onPressed: () {
+//                               print("pressed");
+//                             }),
+//                         IconButton(
+//                             icon: Icon(Icons.outlined_flag,
+//                                 color: Colors.white, size: 40),
+//                             onPressed: () {
+//                               print("pressed");
+//                             }),
+//                       ],
+//                     )
+//                   : null,
+//             ),
+//           ),
+//           Positioned(
+//             top: 8,
+//             right: 20,
+//             child: RawMaterialButton(
+//               onPressed: () {
+//                 setState(() {
+//                   isModalOpen = !isModalOpen;
+//                 });
+//               },
+//               elevation: 2.0,
+//               fillColor: Colors.white,
+//               child: Icon(
+//                 isModalOpen
+//                     ? Icons.keyboard_arrow_up
+//                     // : Icons.keyboard_arrow_down,
+//                     // : Icons.clear_all,
+//                     : Icons.dehaze,
+//                 size: 40.0,
+//                 color: Colors.black,
+//               ),
+//               padding: EdgeInsets.all(10.0),
+//               shape: CircleBorder(),
+//             ),
+//           ),
