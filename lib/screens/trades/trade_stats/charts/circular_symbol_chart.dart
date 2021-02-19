@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:forex_app/screens/trades/trades_screen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../chart_helpers.dart';
+import 'chart_helpers.dart';
 
 class CircularSymbolChart extends StatelessWidget {
   final String posNegAll;

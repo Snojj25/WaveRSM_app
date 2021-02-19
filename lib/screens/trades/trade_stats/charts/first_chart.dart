@@ -3,7 +3,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../models/trade.model.dart';
 import '../../trades_screen.dart';
-import '../chart_helpers.dart';
+import 'chart_helpers.dart';
 
 // * 1. PROFIT BY MONTH CHART =======================================
 // * ================================================================

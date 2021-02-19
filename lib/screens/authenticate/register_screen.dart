@@ -162,7 +162,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
                 SizedBox(height: 30),
                 // ! Registration button ===========================
-                FlatButton(
+                TextButton(
                   child: Container(
                     alignment: Alignment.center,
                     height: 40,
@@ -195,11 +195,12 @@ class _RegisterFormState extends State<RegisterForm> {
                           isLoading = false;
                         });
                         showDialog(
-                            context: context,
-                            child: AlertDialog(
-                              title: Text("Error"),
-                              content: Text(err.toString()),
-                            ));
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text("Error"),
+                            content: Text(err.toString()),
+                          ),
+                        );
                       }).then((user) => {
                                 if (user == null)
                                   {
@@ -232,7 +233,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   },
                 ),
                 // ! ====================================
-                FlatButton(
+                TextButton(
                   child: Text(
                     "I alredy have an account.",
                     style: TextStyle(

@@ -159,7 +159,7 @@ class _SignInFormState extends State<SignInForm> {
                 SizedBox(height: 0.03 * height),
 
                 //* SIGN IN ===========================
-                FlatButton(
+                TextButton(
                   child: Container(
                     alignment: Alignment.center,
                     height: 0.06 * height,
@@ -189,10 +189,10 @@ class _SignInFormState extends State<SignInForm> {
                           .catchError((err) {
                         showDialog(
                             context: context,
-                            child: AlertDialog(
-                              title: Text("Error"),
-                              content: Text(err.toString()),
-                            ));
+                            builder: (context) => AlertDialog(
+                                  title: Text("Error"),
+                                  content: Text(err.toString()),
+                                ));
                         setState(() {
                           isLoading = false;
                         });
@@ -230,7 +230,7 @@ class _SignInFormState extends State<SignInForm> {
                 ButtonBar(
                   buttonMinWidth: width,
                   children: <Widget>[
-                    FlatButton(
+                    TextButton(
                         onPressed: () {
                           Navigator.of(context).pushReplacementNamed(
                               RegisterProfileScreen.routeName);
@@ -239,7 +239,7 @@ class _SignInFormState extends State<SignInForm> {
                           "Create account",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )),
-                    FlatButton(
+                    TextButton(
                         onPressed: () {},
                         child: Text(
                           "Forgot password",

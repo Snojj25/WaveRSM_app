@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:forex_app/screens/first_screen/first_screen.dart';
+import 'package:forex_app/screens/active_posts/active_posts.dart';
 import 'package:forex_app/screens/home_screen/home_screen.dart';
-import 'package:forex_app/screens/posts/new_post_helpers/video_post.dart';
+// import 'package:forex_app/screens/posts/new_post_helpers/video_post.dart';
 import 'package:forex_app/screens/settings/settings_screen.dart';
 import 'package:forex_app/screens/trades/trades_screen.dart';
 
@@ -83,8 +83,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (ctx) =>
-                          TradesScreen(colorScheme: widget.colorScheme),
+                      builder: (ctx) => ActivePosts(),
                     ),
                   )
                 }
@@ -92,7 +91,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (ctx) => FirstScreen(),
+                      builder: (ctx) =>
+                          TradesScreen(colorScheme: widget.colorScheme),
                     ),
                   )
                 }

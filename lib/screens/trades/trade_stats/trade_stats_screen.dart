@@ -6,7 +6,7 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:forex_app/models/trade.model.dart';
 import 'package:forex_app/screens/trades/trade_stats/stats_container.dart';
 
-import '../trade_stats/chart_helpers.dart';
+import 'charts/chart_helpers.dart';
 import '../../../services/database.service.dart';
 import 'charts/first_chart.dart';
 
@@ -54,123 +54,115 @@ class _TradeStatsScreenState extends State<TradeStatsScreen> {
       //             widget.colorScheme == "dark" ? Colors.white : Colors.black),
       //   ),
       // ),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                height: 0.25 * height,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: widget.colorScheme == "dark"
-                        ? [
-                            Colors.black,
-                            Colors.indigo[900],
-                            Colors.black,
-                          ]
-                        : [
-                            Colors.grey[500],
-                            Colors.white,
-                            Colors.grey[500],
-                          ],
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext ctx, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              expandedHeight: 0.3 * height,
+              floating: false,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                centerTitle: true,
+                stretchModes: [StretchMode.fadeTitle],
+                title: Container(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    "YOUR TRADE STATISTICS",
+                    textScaleFactor: 1.1,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: widget.colorScheme == "dark"
+                            ? Colors.yellow[300]
+                            : Colors.black,
+                        fontWeight: FontWeight.w900,
+                        shadows: [
+                          Shadow(
+                              blurRadius: 3,
+                              offset: Offset(2, 2),
+                              color: Colors.black87)
+                        ]),
                   ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 25),
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            color: widget.colorScheme == "dark"
-                                ? Colors.indigo[900]
-                                : Colors.grey[700],
-                            width: 5),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Text(
-                        "YOUR TRADE STATISTICS",
-                        textScaleFactor: 2,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: widget.colorScheme == "dark"
-                              ? Colors.yellow[100]
-                              : Colors.black,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
+                background: Image.asset(
+                  "assets/stock_photos/stock_image5.jpg",
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ];
+        },
+        body: Container(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // ? FIRST CHART STRAT ================================
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  height: 0.8 * height,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: widget.colorScheme == "dark"
+                          ? [Colors.black, Colors.indigo[900]]
+                          : [Colors.grey[500], Colors.white],
+                      // [
+                      //   Colors.black,
+                      //   Colors.indigo[900],
+                      // ],
+                      begin: Alignment.topRight,
                     ),
-                  ],
-                ),
-              ),
-
-              // ? FIRST CHART STRAT ================================
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                height: 0.8 * height,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: widget.colorScheme == "dark"
-                        ? [Colors.black, Colors.indigo[900]]
-                        : [Colors.grey[500], Colors.white],
-                    // [
-                    //   Colors.black,
-                    //   Colors.indigo[900],
-                    // ],
-                    begin: Alignment.topRight,
                   ),
+                  child: ProfitByMonthChart(
+                      allTrades: widget.allTrades,
+                      colorScheme: widget.colorScheme),
                 ),
-                child: ProfitByMonthChart(
+                // ? FIRST CHART END ====================================
+                // ! SECOND CHART START =================================
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 0.07 * height),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: widget.colorScheme == "dark"
+                          ? [Colors.black, Colors.indigo[900]]
+                          : [Colors.grey[500], Colors.white],
+                      begin: Alignment.topRight,
+                    ),
+                  ),
+                  height: 0.9 * height,
+                  child: SymbolProfitChart(
                     allTrades: widget.allTrades,
-                    colorScheme: widget.colorScheme),
-              ),
-              // ? FIRST CHART END ====================================
-              // ! SECOND CHART START =================================
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 0.07 * height),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: widget.colorScheme == "dark"
-                        ? [Colors.black, Colors.indigo[900]]
-                        : [Colors.grey[500], Colors.white],
-                    begin: Alignment.topRight,
+                    colorScheme: widget.colorScheme,
                   ),
                 ),
-                height: 0.9 * height,
-                child: SymbolProfitChart(
-                  allTrades: widget.allTrades,
-                  colorScheme: widget.colorScheme,
-                ),
-              ),
-              // ! SECOND CHART END ====================================
-              // & THIRD CHART START ===================================
-              FutureBuilder(
-                  future: dbService.getUserTradeStats(_uid),
-                  builder: (ctx, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    } else {
-                      return Container(
-                        padding: EdgeInsets.symmetric(vertical: 0.07 * height),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: widget.colorScheme == "dark"
-                                ? [Colors.black, Colors.indigo[900]]
-                                : [Colors.grey[500], Colors.white],
-                            begin: Alignment.topRight,
+                // ! SECOND CHART END ====================================
+                // & THIRD CHART START ===================================
+                FutureBuilder(
+                    future: dbService.getUserTradeStats(_uid),
+                    builder: (ctx, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else {
+                        return Container(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 0.07 * height),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: widget.colorScheme == "dark"
+                                  ? [Colors.black, Colors.indigo[900]]
+                                  : [Colors.grey[500], Colors.white],
+                              begin: Alignment.topRight,
+                            ),
                           ),
-                        ),
-                        width: double.infinity,
-                        // height: 0.9 * height,
-                        child: StatsContainer(
-                            tradeStats: snapshot.data,
-                            colorScheme: widget.colorScheme),
-                      );
-                    }
-                  }),
-              // & THIRD CHART END =====================================
-            ],
+                          width: double.infinity,
+                          // height: 0.9 * height,
+                          child: StatsContainer(
+                              tradeStats: snapshot.data,
+                              colorScheme: widget.colorScheme),
+                        );
+                      }
+                    }),
+                // & THIRD CHART END =====================================
+              ],
+            ),
           ),
         ),
       ),

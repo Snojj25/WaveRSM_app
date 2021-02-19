@@ -31,7 +31,7 @@ class _TradeImageLabelerState extends State<TradeImageLabeler> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: FlatButton(
+          child: TextButton(
             onPressed: () async {
               setState(() {
                 isLoading = true;

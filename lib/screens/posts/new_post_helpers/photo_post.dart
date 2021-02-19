@@ -140,7 +140,7 @@ class _NewPostFormState extends State<NewPostForm> {
                   ),
                 ),
                 _selectedImageFile == null
-                    ? RaisedButton(
+                    ? TextButton(
                         child: Text("Add a new post"),
                         onPressed: () async {
                           try {
@@ -153,25 +153,27 @@ class _NewPostFormState extends State<NewPostForm> {
                             print(err);
                           }
                         })
-                    : RaisedButton(
-                        color: Colors.red,
+                    : TextButton(
                         onPressed: () {
                           setState(() {
                             _selectedImageFile = null;
                           });
                         },
-                        child: Text(
-                          "cancel",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          textScaleFactor: 1.3,
+                        child: Container(
+                          color: Colors.red,
+                          child: Text(
+                            "cancel",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                            textScaleFactor: 1.3,
+                          ),
                         ),
                       ),
                 _selectedImageFile != null
                     ? Container(child: Image.file(_selectedImageFile))
                     : Text(""),
-                RaisedButton(
-                  color: Colors.green,
+                TextButton(
                   child: Container(
+                    color: Colors.green,
                     width: width * 0.5,
                     alignment: Alignment.center,
                     child: Text(
