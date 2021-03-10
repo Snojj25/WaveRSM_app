@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../models/trade.model.dart';
-import 'charts/circular_symbol_chart.dart';
-import 'charts/column_symbols_chart.dart';
+import '../../../../models/trade.model.dart';
+import 'circular_symbol_chart.dart';
+import 'column_symbols_chart.dart';
 
 // & 2. SYMBOL PROFIT CHART ==========================================
 // & ================================================================

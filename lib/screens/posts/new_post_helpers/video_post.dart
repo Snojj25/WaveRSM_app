@@ -6,7 +6,6 @@ import 'package:forex_app/screens/settings/app_settings.config.dart';
 
 import '../../../services/database.service.dart';
 import '../../../services/ml_vision.service.dart';
-import '../../../shared/video_player.dart';
 
 String colorScheme;
 
@@ -42,7 +41,7 @@ class _VideoPostState extends State<VideoPost> {
               padding: const EdgeInsets.all(15),
               alignment: Alignment.center,
               child: Text(
-                "Add a photo post here!",
+                "Add a video post here!",
                 textScaleFactor: 1.7,
                 style: TextStyle(
                   color: colorScheme == "dark" ? Colors.white : Colors.black,
@@ -115,8 +114,23 @@ class _NewPostFormState extends State<NewPostForm> {
                           : Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
-                    decoration: inputDecoration.copyWith(
-                        hintText: "enter a title", labelText: "title"),
+                    decoration: InputDecoration(
+                      hintText: "Enter a title",
+                      labelText: "Title",
+                      labelStyle: TextStyle(
+                        color: widget.colorScheme == "dark"
+                            ? Colors.white
+                            : Colors.black,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      hintStyle: TextStyle(
+                        color: widget.colorScheme == "dark"
+                            ? Colors.white
+                            : Colors.black87,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      fillColor: Color.fromRGBO(1, 2, 3, 0),
+                    ),
                   ),
                 ),
                 Padding(
@@ -127,10 +141,27 @@ class _NewPostFormState extends State<NewPostForm> {
                         ? Colors.blue[300]
                         : Colors.black,
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                    decoration: inputDecoration.copyWith(
-                        hintText: "enter a description",
-                        labelText: "description"),
+                        color: widget.colorScheme == "dark"
+                            ? Colors.white
+                            : Colors.black,
+                        fontWeight: FontWeight.bold),
+                    decoration: InputDecoration(
+                      hintText: "Enter a description",
+                      labelText: "Description",
+                      labelStyle: TextStyle(
+                        color: widget.colorScheme == "dark"
+                            ? Colors.white
+                            : Colors.black,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      hintStyle: TextStyle(
+                        color: widget.colorScheme == "dark"
+                            ? Colors.white
+                            : Colors.black87,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      fillColor: Color.fromRGBO(1, 2, 3, 0),
+                    ),
                     validator: (val) =>
                         val.isEmpty ? "Enter a description" : null,
                     controller: _descController,
@@ -144,9 +175,27 @@ class _NewPostFormState extends State<NewPostForm> {
                         ? Colors.blue[300]
                         : Colors.black,
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                    decoration: inputDecoration.copyWith(
-                        hintText: "enter a symbol", labelText: "symbol"),
+                        color: widget.colorScheme == "dark"
+                            ? Colors.white
+                            : Colors.black,
+                        fontWeight: FontWeight.bold),
+                    decoration: InputDecoration(
+                      hintText: "Enter a symbol",
+                      labelText: "Symbol",
+                      labelStyle: TextStyle(
+                        color: widget.colorScheme == "dark"
+                            ? Colors.white
+                            : Colors.black,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      hintStyle: TextStyle(
+                        color: widget.colorScheme == "dark"
+                            ? Colors.white
+                            : Colors.black87,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      fillColor: Color.fromRGBO(1, 2, 3, 0),
+                    ),
                     validator: (val) => val.isEmpty ? "Enter a symbol" : null,
                     controller: _symbolController,
                   ),
@@ -173,22 +222,26 @@ class _NewPostFormState extends State<NewPostForm> {
                             _selectedVideoFile = null;
                           });
                         },
-                        child: Text(
-                          "cancel",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          textScaleFactor: 1.3,
+                        child: Container(
+                          color: Colors.red,
+                          child: Text(
+                            "cancel",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                            textScaleFactor: 1.3,
+                          ),
                         ),
                       ),
 
                 // * VIDEO FILE PREVIEW =============================
                 _selectedVideoFile != null
                     ? Container(
-                        child: CustomVideoPlayer(),
+                        child: Text("This is where the video should be"),
                       )
                     : Text(""),
                 ElevatedButton(
                   // color: Colors.green,
                   child: Container(
+                    padding: const EdgeInsets.all(10),
                     width: width * 0.5,
                     alignment: Alignment.center,
                     child: Text(
@@ -196,6 +249,10 @@ class _NewPostFormState extends State<NewPostForm> {
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                       textScaleFactor: 1.5,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.green,
                     ),
                   ),
                   onPressed: () {
@@ -228,12 +285,6 @@ class _NewPostFormState extends State<NewPostForm> {
 
 // * ================================================================
 // ?                HELPERS
-
-final inputDecoration = InputDecoration(
-  labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
-  hintStyle: TextStyle(color: Colors.black87, fontWeight: FontWeight.normal),
-  fillColor: Color.fromRGBO(1, 2, 3, 0),
-);
 
 Future<void> _submitPost(File imageFile, String title, String description,
     String symbol, bool isPhoto) async {

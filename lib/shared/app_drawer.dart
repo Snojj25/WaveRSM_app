@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:forex_app/screens/settings/app_settings.config.dart';
+// import 'package:forex_app/screens/settings/app_settings.config.dart';
 
 import '../screens/posts/new_post.dart';
 import '../screens/settings/settings_screen.dart';
@@ -63,12 +63,8 @@ class _AppDrawerState extends State<AppDrawer> {
                     Icons.settings,
                     color: Colors.white,
                   ),
-                  onPressed: () async {
-                    final String colorScheme = await getColorScheme();
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          SettingsScreen(colorScheme: colorScheme),
-                    ));
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(SettingsScreen.routeName);
                   },
                 )
               ],
@@ -213,8 +209,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (ctx) =>
-                          SettingsScreen(colorScheme: widget.colorScheme),
+                      builder: (ctx) => SettingsScreen(),
                     ),
                   );
                 },
