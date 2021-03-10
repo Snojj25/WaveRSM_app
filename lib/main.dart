@@ -48,7 +48,6 @@ class MyApp extends StatelessWidget {
                   black: Typography.blackHelsinki,
                   white: Typography.whiteMountainView,
                 ),
-                cursorColor: Colors.white,
                 hintColor: Colors.white60,
                 textTheme: TextTheme(
                   bodyText1: TextStyle(color: Colors.grey[600]),

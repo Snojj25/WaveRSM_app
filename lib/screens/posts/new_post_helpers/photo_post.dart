@@ -140,7 +140,7 @@ class _NewPostFormState extends State<NewPostForm> {
                   ),
                 ),
                 _selectedImageFile == null
-                    ? RaisedButton(
+                    ? ElevatedButton(
                         child: Text("Add a new post"),
                         onPressed: () async {
                           try {
@@ -153,8 +153,7 @@ class _NewPostFormState extends State<NewPostForm> {
                             print(err);
                           }
                         })
-                    : RaisedButton(
-                        color: Colors.red,
+                    : ElevatedButton(
                         onPressed: () {
                           setState(() {
                             _selectedImageFile = null;
@@ -169,8 +168,8 @@ class _NewPostFormState extends State<NewPostForm> {
                 _selectedImageFile != null
                     ? Container(child: Image.file(_selectedImageFile))
                     : Text(""),
-                RaisedButton(
-                  color: Colors.green,
+                ElevatedButton(
+                  // color: Colors.green,
                   child: Container(
                     width: width * 0.5,
                     alignment: Alignment.center,
@@ -182,36 +181,6 @@ class _NewPostFormState extends State<NewPostForm> {
                     ),
                   ),
                   onPressed: () {
-                    // for (var i = 0; i < 25; i++) {
-                    //   var title;
-                    //   var desc;
-                    //   var imgUrl;
-                    //   var dateTime;
-                    //   if (i % 3 == 0) {
-                    //     title = "EURUSD Long";
-                    //     desc =
-                    //         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu diam ac dolor auctor aliquam. Integer vitae ultricies dolor. In at elementum arcu. Praesent sed ex posuere, pulvinar metus in, consequat metus";
-                    //     imgUrl =
-                    //         "https://www.waveanalysis.net/images/ideas/idea-mj1HDiqy_GBPJPY_Long.png";
-                    //     dateTime = DateTime.now();
-                    //   }
-                    //   if (i % 4 == 0) {
-                    //     title = "GBPNZD Short";
-                    //     desc =
-                    //         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu diam ac dolor auctor aliquam. Integer vitae ultricies dolor. In at elementum arcu. Praesent sed ex posuere, pulvinar metus in, consequat metus";
-                    //     imgUrl =
-                    //         "https://www.waveanalysis.net/images/ideas/idea-mj1HDiqy_GBPJPY_Long.png";
-                    //     dateTime = DateTime.now();
-                    //   } else {
-                    //     title = "AUDCAD Long";
-                    //     desc =
-                    //         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu diam ac dolor auctor aliquam. Integer vitae ultricies dolor. In at elementum arcu. Praesent sed ex posuere, pulvinar metus in, consequat metus";
-                    //     imgUrl =
-                    //         "https://www.waveanalysis.net/images/ideas/idea-mj1HDiqy_GBPJPY_Long.png";
-                    //     dateTime = DateTime.now();
-                    //   }
-                    //   DataBaseServce().addPost(title, desc, imgUrl, dateTime);
-                    // }
                     setState(() {
                       _isLoading = true;
                     });

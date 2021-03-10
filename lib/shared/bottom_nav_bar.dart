@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:forex_app/screens/first_screen/first_screen.dart';
 import 'package:forex_app/screens/home_screen/home_screen.dart';
-import 'package:forex_app/screens/posts/new_post_helpers/video_post.dart';
 import 'package:forex_app/screens/settings/settings_screen.dart';
 import 'package:forex_app/screens/trades/trades_screen.dart';
 

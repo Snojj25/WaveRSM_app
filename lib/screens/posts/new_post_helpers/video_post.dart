@@ -153,7 +153,7 @@ class _NewPostFormState extends State<NewPostForm> {
                 ),
                 // !  SELECT FILE BUTTON =======================
                 _selectedVideoFile == null
-                    ? RaisedButton(
+                    ? ElevatedButton(
                         child: Text("Add a new post"),
                         onPressed: () async {
                           try {
@@ -166,8 +166,8 @@ class _NewPostFormState extends State<NewPostForm> {
                             print(err);
                           }
                         })
-                    : RaisedButton(
-                        color: Colors.red,
+                    : ElevatedButton(
+                        // color: Colors.red,
                         onPressed: () {
                           setState(() {
                             _selectedVideoFile = null;
@@ -186,8 +186,8 @@ class _NewPostFormState extends State<NewPostForm> {
                         child: CustomVideoPlayer(),
                       )
                     : Text(""),
-                RaisedButton(
-                  color: Colors.green,
+                ElevatedButton(
+                  // color: Colors.green,
                   child: Container(
                     width: width * 0.5,
                     alignment: Alignment.center,
