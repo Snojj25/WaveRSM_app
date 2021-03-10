@@ -49,13 +49,14 @@ class StatsContainer extends StatelessWidget {
                 StatisticsTextContainer(
                   text: "Positive trades:",
                   color: colorScheme == "dark"
-                      ? Colors.green[200]
+                      ? Colors.greenAccent[400]
                       : Colors.green[800],
                 ),
                 StatisticsTextContainer(
                   text: "negative trades:",
-                  color:
-                      colorScheme == "dark" ? Colors.red[200] : Colors.red[900],
+                  color: colorScheme == "dark"
+                      ? Colors.redAccent[400]
+                      : Colors.red[900],
                 ),
               ],
             ),
@@ -88,14 +89,15 @@ class StatsContainer extends StatelessWidget {
                 StatisticsTextContainer(
                   text: tradeStats.positiveTrades.toString(),
                   color: colorScheme == "dark"
-                      ? Colors.green[200]
+                      ? Colors.greenAccent[400]
                       : Colors.green[800],
                 ),
                 // negative trades
                 StatisticsTextContainer(
                   text: tradeStats.negativeTrades.toString(),
-                  color:
-                      colorScheme == "dark" ? Colors.red[200] : Colors.red[900],
+                  color: colorScheme == "dark"
+                      ? Colors.redAccent[400]
+                      : Colors.red[900],
                 ),
               ],
             ),
@@ -116,13 +118,14 @@ class StatsContainer extends StatelessWidget {
                 StatisticsTextContainer(
                   text: "total positive:",
                   color: colorScheme == "dark"
-                      ? Colors.green[200]
+                      ? Colors.greenAccent[400]
                       : Colors.green[800],
                 ),
                 StatisticsTextContainer(
                   text: "total negative:",
-                  color:
-                      colorScheme == "dark" ? Colors.red[200] : Colors.red[900],
+                  color: colorScheme == "dark"
+                      ? Colors.redAccent[400]
+                      : Colors.red[900],
                 ),
               ],
             ),
@@ -154,14 +157,15 @@ class StatsContainer extends StatelessWidget {
                 StatisticsTextContainer(
                   text: tradeStats.positiveTotal.toString(),
                   color: colorScheme == "dark"
-                      ? Colors.green[200]
+                      ? Colors.greenAccent[400]
                       : Colors.green[800],
                 ),
                 // total negative
                 StatisticsTextContainer(
                   text: tradeStats.negativeTotal.toString(),
-                  color:
-                      colorScheme == "dark" ? Colors.red[200] : Colors.red[900],
+                  color: colorScheme == "dark"
+                      ? Colors.redAccent[400]
+                      : Colors.red[900],
                 ),
               ],
             ),
@@ -182,13 +186,14 @@ class StatsContainer extends StatelessWidget {
                 StatisticsTextContainer(
                   text: "Average positive:",
                   color: colorScheme == "dark"
-                      ? Colors.green[200]
+                      ? Colors.greenAccent[400]
                       : Colors.green[800],
                 ),
                 StatisticsTextContainer(
                   text: "Average negative:",
-                  color:
-                      colorScheme == "dark" ? Colors.red[200] : Colors.red[900],
+                  color: colorScheme == "dark"
+                      ? Colors.redAccent[400]
+                      : Colors.red[900],
                 ),
               ],
             ),
@@ -222,15 +227,16 @@ class StatsContainer extends StatelessWidget {
                   text: (tradeStats.positiveTotal / tradeStats.positiveTrades)
                       .toStringAsFixed(2),
                   color: colorScheme == "dark"
-                      ? Colors.green[200]
+                      ? Colors.greenAccent[400]
                       : Colors.green[800],
                 ),
                 // Average negative
                 StatisticsTextContainer(
                   text: (tradeStats.negativeTotal / tradeStats.negativeTrades)
                       .toStringAsFixed(2),
-                  color:
-                      colorScheme == "dark" ? Colors.red[200] : Colors.red[900],
+                  color: colorScheme == "dark"
+                      ? Colors.redAccent[400]
+                      : Colors.red[900],
                 ),
               ],
             ),
@@ -245,13 +251,14 @@ class StatsContainer extends StatelessWidget {
                 StatisticsTextContainer(
                   text: "% positive trades:",
                   color: colorScheme == "dark"
-                      ? Colors.green[200]
+                      ? Colors.greenAccent[400]
                       : Colors.green[800],
                 ),
                 StatisticsTextContainer(
                   text: "% negative trades:",
-                  color:
-                      colorScheme == "dark" ? Colors.red[200] : Colors.red[900],
+                  color: colorScheme == "dark"
+                      ? Colors.redAccent[400]
+                      : Colors.red[900],
                 ),
               ],
             ),
@@ -279,7 +286,7 @@ class StatsContainer extends StatelessWidget {
                           .toStringAsFixed(1) +
                       "%",
                   color: colorScheme == "dark"
-                      ? Colors.green[200]
+                      ? Colors.greenAccent[400]
                       : Colors.green[800],
                 ),
                 // % negative trades
@@ -288,8 +295,9 @@ class StatsContainer extends StatelessWidget {
                               100)
                           .toStringAsFixed(1) +
                       "%",
-                  color:
-                      colorScheme == "dark" ? Colors.red[200] : Colors.red[900],
+                  color: colorScheme == "dark"
+                      ? Colors.redAccent[400]
+                      : Colors.red[900],
                 ),
               ],
             ),

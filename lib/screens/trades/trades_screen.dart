@@ -26,17 +26,19 @@ class TradesScreen extends StatefulWidget {
 }
 
 class _TradesScreenState extends State<TradesScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   bool isLoading = true;
   String colorScheme;
   bool isModalOpen = false;
 
-  List<OverlayEntry> _entries;
+  List<OverlayEntry> _entries = [];
 
-  AnimationController _controller;
+  AnimationController _positionController;
   Animation<double> _animation1;
   Animation<double> _animation2;
   Animation<double> _animation3;
+
+  AnimationController _colorController;
 
   List<Animation> _animations;
 
@@ -46,6 +48,7 @@ class _TradesScreenState extends State<TradesScreen>
 
   @override
   void initState() {
+    // =====================================
     getColorScheme().then((value) {
       GlobalConfiguration().addValue("colorScheme", value);
       setState(() {
@@ -56,32 +59,39 @@ class _TradesScreenState extends State<TradesScreen>
       print(err);
     });
     isLoading = false;
-
-    _controller = AnimationController(
+    // =====================================
+    // =====================================
+    _positionController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 800),
     );
     _animation1 = Tween<double>(begin: 1, end: 0.15).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: _positionController,
         curve: Interval(0.0, 0.6, curve: Curves.decelerate),
       ),
     );
     _animation2 = Tween<double>(begin: 1, end: 0.08).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: _positionController,
         curve: Interval(0.0, 0.8, curve: Curves.decelerate),
       ),
     );
     _animation3 = Tween<double>(begin: 1, end: 0.01).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: _positionController,
         curve: Interval(0.0, 1.0, curve: Curves.decelerate),
       ),
     );
+    // =====================================
 
+    _colorController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 6),
+    )..repeat();
+
+    // =====================================
     _animations = [_animation1, _animation2, _animation3];
-
     void f1() {
       print("f1");
     }
@@ -95,8 +105,21 @@ class _TradesScreenState extends State<TradesScreen>
     }
 
     _functions = [f1, f2, f3];
+    // =====================================
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (_entries.isNotEmpty) {
+      for (OverlayEntry entry in _entries) {
+        entry.remove();
+      }
+    }
+    _colorController.dispose();
+    _positionController.dispose();
+    super.dispose();
   }
 
   @override
@@ -162,10 +185,17 @@ class _TradesScreenState extends State<TradesScreen>
           onPressed: () {
             setState(() {
               if (isModalOpen) {
-                removeOverlay(context, _controller, _entries);
+                removeOverlay(_positionController, _entries);
               } else {
                 _entries = showOverlay(
-                    context, _controller, _animations, _functions, _icons);
+                  context,
+                  _positionController,
+                  _colorController,
+                  _animations,
+                  _functions,
+                  _icons,
+                  colorScheme,
+                );
               }
               isModalOpen = !isModalOpen;
             });

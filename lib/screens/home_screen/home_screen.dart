@@ -20,29 +20,37 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   bool isLoading = true;
   bool photoMode = true;
   String colorScheme;
   bool isModalOpen = false;
 
-  List<OverlayEntry> entries;
+  List<OverlayEntry> entries = [];
 
-  AnimationController _controller;
+  AnimationController _positionController;
   Animation<double> _animation1;
   Animation<double> _animation2;
   Animation<double> _animation3;
+
+  AnimationController _colorController;
 
   List<Animation> _animations;
 
   List<dynamic> _functions;
 
-  List<IconData> _icons = [Icons.ac_unit, Icons.feedback, Icons.party_mode];
+  List<IconData> _icons = [
+    Icons.exit_to_app_rounded,
+    Icons.feedback,
+    Icons.party_mode
+  ];
 
   //? ==================================================================
   @override
   void initState() {
+    // ==============================
     getColorScheme().then((value) {
       GlobalConfiguration().addValue("colorScheme", value);
       setState(() {
@@ -53,30 +61,38 @@ class _HomeScreenState extends State<HomeScreen>
       print(err);
     });
     isLoading = false;
-
-    _controller = AnimationController(
+    // ==============================
+    // ==============================
+    _positionController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 800),
     );
     _animation1 = Tween<double>(begin: 1, end: 0.15).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: _positionController,
         curve: Interval(0.0, 0.6, curve: Curves.decelerate),
       ),
     );
     _animation2 = Tween<double>(begin: 1, end: 0.08).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: _positionController,
         curve: Interval(0.0, 0.8, curve: Curves.decelerate),
       ),
     );
     _animation3 = Tween<double>(begin: 1, end: 0.01).animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: _positionController,
         curve: Interval(0.0, 1.0, curve: Curves.decelerate),
       ),
     );
-
+    // ==============================
+    // ==============================
+    _colorController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 6),
+    )..repeat();
+    // ==============================
+    // ==============================
     _animations = [_animation1, _animation2, _animation3];
 
     void f1() {
@@ -94,13 +110,20 @@ class _HomeScreenState extends State<HomeScreen>
     }
 
     _functions = [f1, f2, f3];
+    // ==============================
 
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (entries.isNotEmpty) {
+      for (OverlayEntry entry in entries) {
+        entry.remove();
+      }
+    }
+    _colorController.dispose();
+    _positionController.dispose();
     super.dispose();
   }
 
@@ -112,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen>
     return isLoading
         ? CircularProgressIndicator()
         : Scaffold(
+            key: _scaffoldKey,
             appBar: getHomeScreenAppbar(colorScheme),
             body: Container(
               decoration: BoxDecoration(
@@ -138,14 +162,16 @@ class _HomeScreenState extends State<HomeScreen>
                 onPressed: () {
                   setState(() {
                     if (isModalOpen) {
-                      removeOverlay(context, _controller, entries);
+                      removeOverlay(_positionController, entries);
                     } else {
                       entries = showOverlay(
                         context,
-                        _controller,
+                        _positionController,
+                        _colorController,
                         _animations,
                         _functions,
                         _icons,
+                        colorScheme,
                       );
                     }
                     isModalOpen = !isModalOpen;

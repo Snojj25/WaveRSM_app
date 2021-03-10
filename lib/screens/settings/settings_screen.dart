@@ -1,39 +1,128 @@
 import 'package:flutter/material.dart';
+import 'package:forex_app/screens/posts/new_post_helpers/video_post.dart';
+import 'package:forex_app/screens/settings/settings_utils/settings_cards.dart';
+import 'package:forex_app/screens/settings/settings_utils/settings_swithces.dart';
+import 'package:forex_app/shared/bottom_nav_bar.dart';
+import 'package:forex_app/shared/overlays.dart';
 import 'package:provider/provider.dart';
-import 'app_settings.config.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'app_settings.config.dart';
 import '../../models/user.dart';
 import '../../shared/app_drawer.dart';
-import '../posts/new_post_helpers/video_post.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const String routeName = "/settings-screen";
-  final String colorScheme;
 
-  SettingsScreen({@required this.colorScheme});
+  SettingsScreen({Key key}) : super(key: key);
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends State<SettingsScreen>
+    with TickerProviderStateMixin {
   String _colorScheme;
 
-  bool _appUpdates;
+  bool isLoading = true;
+  bool photoMode = true;
+  bool isModalOpen = false;
+
+  List<OverlayEntry> entries = [];
+
+  AnimationController _positionController;
+  Animation<double> _animation1;
+  Animation<double> _animation2;
+  Animation<double> _animation3;
+
+  AnimationController _colorController;
+
+  List<Animation> _animations;
+
+  List<dynamic> _functions;
+
+  List<IconData> _icons = [Icons.ac_unit, Icons.feedback, Icons.party_mode];
 
   @override
   void initState() {
+    // =======================================
+    // =======================================
     super.initState();
-    _appUpdates = false;
-    _colorScheme = widget.colorScheme;
+    getColorScheme().then((value) {
+      GlobalConfiguration().addValue("colorScheme", value);
+      setState(() {
+        _colorScheme = value;
+      });
+    }).catchError((err) {
+      print("error code: failed home screen init state color scheme set");
+      print(err);
+    });
+    // =======================================
+    // =======================================
+    _positionController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 800),
+    );
+    _animation1 = Tween<double>(begin: 1, end: 0.15).animate(
+      CurvedAnimation(
+        parent: _positionController,
+        curve: Interval(0.0, 0.6, curve: Curves.decelerate),
+      ),
+    );
+    _animation2 = Tween<double>(begin: 1, end: 0.08).animate(
+      CurvedAnimation(
+        parent: _positionController,
+        curve: Interval(0.0, 0.8, curve: Curves.decelerate),
+      ),
+    );
+    _animation3 = Tween<double>(begin: 1, end: 0.01).animate(
+      CurvedAnimation(
+        parent: _positionController,
+        curve: Interval(0.0, 1.0, curve: Curves.decelerate),
+      ),
+    );
+    // =======================================
+    // =======================================
+    _colorController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 6),
+    )..repeat();
+    // =======================================
+    // =======================================
+    _animations = [_animation1, _animation2, _animation3];
+    void f1() {
+      print("f1");
+    }
+
+    void f2() {
+      print("f2");
+    }
+
+    void f3() {
+      setState(() {
+        photoMode = !photoMode;
+      });
+    }
+
+    _functions = [f1, f2, f3];
+  }
+
+  @override
+  void dispose() {
+    if (entries.isNotEmpty) {
+      for (OverlayEntry entry in entries) {
+        entry.remove();
+      }
+    }
+    _positionController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final UserData userData = Provider.of<UserData>(context);
-    return Scaffold(
+    var scaffold = Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
             color: _colorScheme == "dark" ? Colors.white : Colors.black),
@@ -53,27 +142,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
               color: _colorScheme == "dark" ? Colors.white : Colors.black,
             ),
             onPressed: () async {
-              print(GlobalConfiguration().getValue("colorScheme"));
-              if (_colorScheme == "dark") {
-                await setColorScheme("light");
-                GlobalConfiguration().updateValue("colorScheme", "light");
-                setState(() {
-                  _colorScheme = "light";
-                });
-              } else {
-                await setColorScheme("dark");
-                GlobalConfiguration().updateValue("colorScheme", "dark");
-                setState(() {
-                  _colorScheme = "dark";
-                });
-              }
-              print(GlobalConfiguration().getValue("colorScheme"));
+              setState(() {
+                changeColorScheme();
+              });
             },
           )
         ],
       ),
       drawer:
-          AppDrawer(userData: userData, colorScheme: colorScheme, active: 3),
+          AppDrawer(userData: userData, colorScheme: _colorScheme, active: 3),
       body: Container(
         decoration: BoxDecoration(
           gradient: _colorScheme == "dark"
@@ -124,232 +201,68 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10.0),
-                  Card(
-                    color: _colorScheme == "dark"
-                        ? Colors.blueGrey[200]
-                        : Colors.black87,
-                    elevation: 4.0,
-                    margin: const EdgeInsets.fromLTRB(32.0, 8.0, 32.0, 16.0),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Column(
-                      children: <Widget>[
-                        ListTile(
-                          leading: Icon(
-                            Icons.lock_outline,
-                            color: _colorScheme == "dark"
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                          title: Text(
-                            "Change Password",
-                            style: TextStyle(
-                              color: _colorScheme == "dark"
-                                  ? Colors.black
-                                  : Colors.white,
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.keyboard_arrow_right,
-                            color: _colorScheme == "dark"
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                          onTap: () {
-                            //open change password
-                          },
-                        ),
-                        _buildDivider(),
-                        ListTile(
-                          leading: Icon(
-                            FontAwesomeIcons.language,
-                            color: _colorScheme == "dark"
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                          title: Text(
-                            "Change Language",
-                            style: TextStyle(
-                              color: _colorScheme == "dark"
-                                  ? Colors.black
-                                  : Colors.white,
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.keyboard_arrow_right,
-                            color: _colorScheme == "dark"
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                          onTap: () {
-                            //open change language
-                          },
-                        ),
-                        _buildDivider(),
-                        ListTile(
-                          leading: Icon(
-                            Icons.location_on,
-                            color: _colorScheme == "dark"
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                          title: Text(
-                            "Change Location",
-                            style: TextStyle(
-                              color: _colorScheme == "dark"
-                                  ? Colors.black
-                                  : Colors.white,
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.keyboard_arrow_right,
-                            color: _colorScheme == "dark"
-                                ? Colors.black
-                                : Colors.white,
-                          ),
-                          onTap: () {
-                            //open change location
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  // ? ======================================================
                   const SizedBox(height: 20.0),
-                  Text(
-                    "Notification Settings",
-                    style: TextStyle(
-                      shadows: [
-                        Shadow(
-                            color: Colors.blue,
-                            blurRadius: 5,
-                            offset: Offset.fromDirection(6, 5)),
-                        Shadow(
-                            color: Colors.white,
-                            blurRadius: 5,
-                            offset: Offset.fromDirection(6, 5)),
-                        Shadow(
-                            color: Colors.blue,
-                            blurRadius: 5,
-                            offset: Offset.fromDirection(6, 5))
-                      ],
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color:
-                          _colorScheme == "dark" ? Colors.black : Colors.white,
-                    ),
-                  ),
-                  SwitchListTile(
-                    activeColor:
-                        _colorScheme == "dark" ? Colors.blue : Colors.black,
-                    contentPadding: const EdgeInsets.all(0),
-                    value: true,
-                    title: Text(
-                      "Received notification",
-                      style: TextStyle(
-                          color: _colorScheme == "dark"
-                              ? Colors.white
-                              : Colors.black),
-                    ),
-                    onChanged: (val) {},
-                  ),
-                  SwitchListTile(
-                    activeColor:
-                        _colorScheme == "dark" ? Colors.blue : Colors.black,
-                    contentPadding: const EdgeInsets.all(0),
-                    value: false,
-                    title: Text(
-                      "Received newsletter",
-                      style: TextStyle(
-                          color: _colorScheme == "dark"
-                              ? Colors.white
-                              : Colors.black),
-                    ),
-                    onChanged: null,
-                  ),
-                  SwitchListTile(
-                    activeColor:
-                        _colorScheme == "dark" ? Colors.blue : Colors.black,
-                    contentPadding: const EdgeInsets.all(0),
-                    value: true,
-                    title: Text(
-                      "Received Offer Notification",
-                      style: TextStyle(
-                          color: _colorScheme == "dark"
-                              ? Colors.white
-                              : Colors.black),
-                    ),
-                    onChanged: (val) {},
-                  ),
-                  SwitchListTile(
-                    value: _appUpdates,
-                    activeColor:
-                        _colorScheme == "dark" ? Colors.blue : Colors.black,
-                    contentPadding: const EdgeInsets.all(0),
-                    title: Text(
-                      "Received App Updates",
-                      style: TextStyle(
-                          color: _colorScheme == "dark"
-                              ? Colors.white
-                              : Colors.black),
-                    ),
-                    onChanged: (bool newValue) {
-                      print(_appUpdates);
-                      setState(() {
-                        _appUpdates = newValue;
-                      });
-                      print(_appUpdates);
-                    },
-                  ),
+                  // ? ======
+                  SecondCard(colorScheme: _colorScheme),
+                  // ? ======
+                  const SizedBox(height: 20.0),
+                  // ? =======
+                  SettingsSwitches(colorScheme: _colorScheme),
+                  // ? =======
                   const SizedBox(height: 60.0),
-                  // RaisedButton(onPressed: () {
-                  //   getSettings();
-                  // })
                 ],
               ),
             ),
             // ? ==========================================================
-            Positioned(
-              bottom: -20,
-              left: -20,
-              child: Container(
-                width: 80,
-                height: 80,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.purple,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 00,
-              left: 00,
-              child: IconButton(
-                icon: Icon(
-                  FontAwesomeIcons.powerOff,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  //log out
-                },
-              ),
-            )
           ],
         ),
       ),
+      // ! BOTTOM NAVIGATION BAR ========
+      bottomNavigationBar:
+          BottomNavBar(colorScheme: _colorScheme, activeIdx: 3),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(
+            isModalOpen ? Icons.close : Icons.view_headline,
+            size: 40,
+          ),
+          onPressed: () {
+            setState(() {
+              if (isModalOpen) {
+                removeOverlay(_positionController, entries);
+              } else {
+                entries = showOverlay(
+                  context,
+                  _positionController,
+                  _colorController,
+                  _animations,
+                  _functions,
+                  _icons,
+                  colorScheme,
+                );
+              }
+              isModalOpen = !isModalOpen;
+            });
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // ! BOTTOM NAVIGATION BAR =================================
     );
+    return scaffold;
   }
 
-  Container _buildDivider() {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 8.0,
-      ),
-      width: double.infinity,
-      height: 1.0,
-      color: Colors.grey.shade400,
-    );
+  changeColorScheme() async {
+    print(GlobalConfiguration().getValue("colorScheme"));
+    if (_colorScheme == "dark") {
+      await setColorScheme("light");
+      GlobalConfiguration().updateValue("colorScheme", "light");
+      setState(() {
+        _colorScheme = "light";
+      });
+    } else {
+      await setColorScheme("dark");
+      GlobalConfiguration().updateValue("colorScheme", "dark");
+      setState(() {
+        _colorScheme = "dark";
+      });
+    }
   }
 }

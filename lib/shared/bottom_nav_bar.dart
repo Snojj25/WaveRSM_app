@@ -76,32 +76,109 @@ class _BottomNavBarState extends State<BottomNavBar> {
             () => {
               if (index == 0)
                 {
-                  Navigator.of(context)
-                      .pushReplacementNamed(HomeScreen.routeName)
+                  Navigator.of(context).pushReplacement(
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return ScaleTransition(
+                          scale: animation,
+                          child: FadeTransition(
+                            opacity: animation,
+                            child: RotationTransition(
+                              turns: secondaryAnimation,
+                              child: child,
+                            ),
+                          ),
+                        );
+                        // SizeTransition(sizeFactor: animation);
+                      },
+                      pageBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Animation<double> secondaryAnimation) {
+                        return HomeScreen();
+                      },
+                      transitionDuration: Duration(milliseconds: 850),
+                    ),
+                  )
                 }
               else if (index == 1)
                 {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (ctx) => ActivePosts(),
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return ScaleTransition(
+                          scale: animation,
+                          child: FadeTransition(
+                            opacity: animation,
+                            child: RotationTransition(
+                              turns: secondaryAnimation,
+                              child: child,
+                            ),
+                          ),
+                        );
+                        // SizeTransition(sizeFactor: animation);
+                      },
+                      pageBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Animation<double> secondaryAnimation) {
+                        return ActivePosts();
+                      },
+                      transitionDuration: Duration(milliseconds: 850),
                     ),
                   )
                 }
               else if (index == 2)
                 {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (ctx) =>
-                          TradesScreen(colorScheme: widget.colorScheme),
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return ScaleTransition(
+                          scale: animation,
+                          child: FadeTransition(
+                            opacity: animation,
+                            child: RotationTransition(
+                              turns: secondaryAnimation,
+                              child: child,
+                            ),
+                          ),
+                        );
+                        // SizeTransition(sizeFactor: animation);
+                      },
+                      pageBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Animation<double> secondaryAnimation) {
+                        return TradesScreen(colorScheme: widget.colorScheme);
+                      },
+                      transitionDuration: Duration(milliseconds: 850),
                     ),
                   )
                 }
               else if (index == 3)
                 {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (ctx) =>
-                          SettingsScreen(colorScheme: widget.colorScheme),
+                    PageRouteBuilder(
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return ScaleTransition(
+                          scale: animation,
+                          child: FadeTransition(
+                            opacity: animation,
+                            child: RotationTransition(
+                              turns: secondaryAnimation,
+                              child: child,
+                            ),
+                          ),
+                        );
+                        // SizeTransition(sizeFactor: animation);
+                      },
+                      pageBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Animation<double> secondaryAnimation) {
+                        return SettingsScreen();
+                      },
+                      transitionDuration: Duration(milliseconds: 850),
                     ),
                   )
                 }

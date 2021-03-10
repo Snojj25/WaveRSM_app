@@ -39,26 +39,11 @@ class _TradeStatsScreenState extends State<TradeStatsScreen> {
     // final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor:
-      //       widget.colorScheme == "dark" ? Colors.black : Colors.grey[500],
-      //   elevation: 0,
-      //   iconTheme: IconThemeData(
-      //       color: widget.colorScheme == "dark" ? Colors.white : Colors.black),
-      //   brightness:
-      //       widget.colorScheme == "dark" ? Brightness.dark : Brightness.light,
-      //   title: Text(
-      //     'Your Trade Statistics',
-      //     style: TextStyle(
-      //         color:
-      //             widget.colorScheme == "dark" ? Colors.white : Colors.black),
-      //   ),
-      // ),
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext ctx, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
-              expandedHeight: 0.3 * height,
+              expandedHeight: 0.2 * height,
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(

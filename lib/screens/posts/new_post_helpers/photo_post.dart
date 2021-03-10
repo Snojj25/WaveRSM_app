@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:forex_app/screens/authenticate/login_screen.dart';
+// import 'package:forex_app/screens/posts/new_post_helpers/video_post.dart';
 import 'package:forex_app/screens/settings/app_settings.config.dart';
+import 'package:forex_app/shared/errors.dart';
 
 import '../../../services/database.service.dart';
 import '../../../services/ml_vision.service.dart';
@@ -49,7 +51,7 @@ class _PhotoPostState extends State<PhotoPost> {
                 ),
               ),
             ),
-            NewPostForm(),
+            NewPostForm(colorScheme: colorScheme),
             _selectedImageFile != null
                 ? Container(
                     height: 100,
@@ -67,7 +69,8 @@ class _PhotoPostState extends State<PhotoPost> {
 }
 
 class NewPostForm extends StatefulWidget {
-  NewPostForm({Key key}) : super(key: key);
+  final String colorScheme;
+  NewPostForm({Key key, @required this.colorScheme}) : super(key: key);
 
   @override
   _NewPostFormState createState() => _NewPostFormState();
@@ -75,12 +78,28 @@ class NewPostForm extends StatefulWidget {
 
 final _formKey = GlobalKey<FormState>();
 
-final _titleController = TextEditingController();
-final _descController = TextEditingController();
-final _symbolController = TextEditingController();
+TextEditingController _titleController;
+TextEditingController _descController;
+TextEditingController _symbolController;
 File _selectedImageFile;
 
 class _NewPostFormState extends State<NewPostForm> {
+  @override
+  void initState() {
+    _titleController = TextEditingController();
+    _descController = TextEditingController();
+    _symbolController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descController.dispose();
+    _symbolController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     bool _isLoading = false;
@@ -101,26 +120,62 @@ class _NewPostFormState extends State<NewPostForm> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                    cursorWidth: 4,
+                    cursorColor: widget.colorScheme == "dark"
+                        ? Colors.blue[300]
+                        : Colors.black,
+                    style: TextStyle(
+                      color: widget.colorScheme == "dark"
+                          ? Colors.white
+                          : Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: "Enter a title",
+                      labelText: "Title",
+                      labelStyle: TextStyle(
+                          color: widget.colorScheme == "dark"
+                              ? Colors.white
+                              : Colors.black,
+                          fontWeight: FontWeight.w300),
+                      hintStyle: TextStyle(
+                          color: widget.colorScheme == "dark"
+                              ? Colors.white
+                              : Colors.black87,
+                          fontWeight: FontWeight.w300),
+                      fillColor: Color.fromRGBO(1, 2, 3, 0),
+                    ),
                     validator: (val) => val.isEmpty ? "Enter a title" : null,
                     controller: _titleController,
-                    cursorWidth: 4,
-                    cursorColor: Colors.blue[300],
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                    decoration: inputDecoration.copyWith(
-                        hintText: "enter a title", labelText: "title"),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     cursorWidth: 4,
-                    cursorColor: Colors.blue[300],
+                    cursorColor: widget.colorScheme == "dark"
+                        ? Colors.blue[300]
+                        : Colors.black,
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                    decoration: inputDecoration.copyWith(
-                        hintText: "enter a description",
-                        labelText: "description"),
+                        color: widget.colorScheme == "dark"
+                            ? Colors.white
+                            : Colors.black,
+                        fontWeight: FontWeight.bold),
+                    decoration: InputDecoration(
+                      hintText: "Enter a description",
+                      labelText: "Description",
+                      labelStyle: TextStyle(
+                          color: widget.colorScheme == "dark"
+                              ? Colors.white
+                              : Colors.black,
+                          fontWeight: FontWeight.w300),
+                      hintStyle: TextStyle(
+                          color: widget.colorScheme == "dark"
+                              ? Colors.white
+                              : Colors.black87,
+                          fontWeight: FontWeight.w300),
+                      fillColor: Color.fromRGBO(1, 2, 3, 0),
+                    ),
                     validator: (val) =>
                         val.isEmpty ? "Enter a description" : null,
                     controller: _descController,
@@ -130,29 +185,59 @@ class _NewPostFormState extends State<NewPostForm> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     cursorWidth: 4,
-                    cursorColor: Colors.blue[300],
+                    cursorColor: widget.colorScheme == "dark"
+                        ? Colors.blue[300]
+                        : Colors.black,
                     style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                    decoration: inputDecoration.copyWith(
-                        hintText: "enter a symbol", labelText: "symbol"),
+                        color: widget.colorScheme == "dark"
+                            ? Colors.white
+                            : Colors.black,
+                        fontWeight: FontWeight.bold),
+                    decoration: InputDecoration(
+                      hintText: "Enter a Symbol",
+                      labelText: "Symbol",
+                      labelStyle: TextStyle(
+                          color: widget.colorScheme == "dark"
+                              ? Colors.white
+                              : Colors.black,
+                          fontWeight: FontWeight.w300),
+                      hintStyle: TextStyle(
+                          color: widget.colorScheme == "dark"
+                              ? Colors.white
+                              : Colors.black87,
+                          fontWeight: FontWeight.w300),
+                      fillColor: Color.fromRGBO(1, 2, 3, 0),
+                    ),
                     validator: (val) => val.isEmpty ? "Enter a symbol" : null,
                     controller: _symbolController,
                   ),
                 ),
                 _selectedImageFile == null
-                    ? TextButton(
-                        child: Text("Add a new post"),
-                        onPressed: () async {
-                          try {
-                            _selectedImageFile = await getImageFile();
-                            setState(() {
-                              _selectedImageFile = _selectedImageFile;
-                            });
-                          } catch (err) {
-                            print("error code: 2006");
-                            print(err);
-                          }
-                        })
+                    ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: TextButton(
+                              child: Text(
+                                "Add a new post",
+                                textScaleFactor: 1.4,
+                              ),
+                              onPressed: () async {
+                                try {
+                                  _selectedImageFile = await getImageFile();
+                                  setState(() {
+                                    _selectedImageFile = _selectedImageFile;
+                                  });
+                                } catch (err) {
+                                  print("error code: 2006");
+                                  print(err);
+                                }
+                              }),
+                        ),
+                      )
                     : TextButton(
                         onPressed: () {
                           setState(() {
@@ -173,7 +258,7 @@ class _NewPostFormState extends State<NewPostForm> {
                     : Text(""),
                 TextButton(
                   child: Container(
-                    color: Colors.green,
+                    padding: const EdgeInsets.all(10),
                     width: width * 0.5,
                     alignment: Alignment.center,
                     child: Text(
@@ -182,45 +267,26 @@ class _NewPostFormState extends State<NewPostForm> {
                           color: Colors.white, fontWeight: FontWeight.bold),
                       textScaleFactor: 1.5,
                     ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.green,
+                    ),
                   ),
                   onPressed: () {
-                    // for (var i = 0; i < 25; i++) {
-                    //   var title;
-                    //   var desc;
-                    //   var imgUrl;
-                    //   var dateTime;
-                    //   if (i % 3 == 0) {
-                    //     title = "EURUSD Long";
-                    //     desc =
-                    //         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu diam ac dolor auctor aliquam. Integer vitae ultricies dolor. In at elementum arcu. Praesent sed ex posuere, pulvinar metus in, consequat metus";
-                    //     imgUrl =
-                    //         "https://www.waveanalysis.net/images/ideas/idea-mj1HDiqy_GBPJPY_Long.png";
-                    //     dateTime = DateTime.now();
-                    //   }
-                    //   if (i % 4 == 0) {
-                    //     title = "GBPNZD Short";
-                    //     desc =
-                    //         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu diam ac dolor auctor aliquam. Integer vitae ultricies dolor. In at elementum arcu. Praesent sed ex posuere, pulvinar metus in, consequat metus";
-                    //     imgUrl =
-                    //         "https://www.waveanalysis.net/images/ideas/idea-mj1HDiqy_GBPJPY_Long.png";
-                    //     dateTime = DateTime.now();
-                    //   } else {
-                    //     title = "AUDCAD Long";
-                    //     desc =
-                    //         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam eu diam ac dolor auctor aliquam. Integer vitae ultricies dolor. In at elementum arcu. Praesent sed ex posuere, pulvinar metus in, consequat metus";
-                    //     imgUrl =
-                    //         "https://www.waveanalysis.net/images/ideas/idea-mj1HDiqy_GBPJPY_Long.png";
-                    //     dateTime = DateTime.now();
-                    //   }
-                    //   DataBaseServce().addPost(title, desc, imgUrl, dateTime);
-                    // }
                     setState(() {
                       _isLoading = true;
                     });
-                    _submitPost(_selectedImageFile, _titleController.text,
-                            _descController.text, _symbolController.text, true)
-                        .catchError((err) {
-                      print(err);
+                    _submitPost(
+                      _selectedImageFile,
+                      _titleController.text,
+                      _descController.text,
+                      _symbolController.text,
+                      true,
+                      context,
+                      widget.colorScheme,
+                    ).catchError((err) {
+                      showErrorDialog(
+                          context, err.toString(), widget.colorScheme);
                     }).then((value) => print("submitted"));
                     setState(() {
                       _selectedImageFile = null;
@@ -247,36 +313,31 @@ final inputDecoration = InputDecoration(
   fillColor: Color.fromRGBO(1, 2, 3, 0),
 );
 
-Future<void> _submitPost(File imageFile, String title, String description,
-    String symbol, bool isPhoto) async {
-  print("step 1");
-
+Future<void> _submitPost(
+    File imageFile,
+    String title,
+    String description,
+    String symbol,
+    bool isPhoto,
+    BuildContext context,
+    String colorScheme) async {
   final StorageReference ref =
       FirebaseStorage.instance.ref().child(imageFile.path);
 
-  print("step 2");
-
   await ref.putFile(imageFile).onComplete.catchError((err) {
-    print("error code: 2001");
-    print(err);
+    showErrorDialog(context, err.toString(), colorScheme);
   });
-
-  print("step 3");
 
   final String url = await ref.getDownloadURL().catchError((err) {
-    print("error code: 2002");
-    print(err);
+    showErrorDialog(context, err.toString(), colorScheme);
   });
-
-  print("step 4");
 
   final DateTime dateTime = DateTime.now();
 
   await DataBaseService()
       .addPost(title, description, url, dateTime, symbol, isPhoto)
       .catchError((err) {
-    print("Error code: 2003");
-    print(err);
+    showErrorDialog(context, err.toString(), colorScheme);
   }).then((value) {
     print("Post added successfuly.");
   });

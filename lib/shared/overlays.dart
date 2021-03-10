@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
 List<OverlayEntry> showOverlay(
-    BuildContext context,
-    AnimationController controller,
-    List<Animation> animations,
-    List<dynamic> functions,
-    List<IconData> icons) {
+  BuildContext context,
+  AnimationController _positionController,
+  AnimationController _colorController,
+  List<Animation> animations,
+  List<dynamic> functions,
+  List<IconData> icons,
+  String colorScheme,
+) {
   OverlayState overlayState = Overlay.of(context);
   final double height = MediaQuery.of(context).size.height;
   final double width = MediaQuery.of(context).size.width;
@@ -23,17 +26,29 @@ List<OverlayEntry> showOverlay(
     builder: (context) => Positioned(
       bottom: 0.12 * height,
       right: _animation1.value * width,
-      child: RawMaterialButton(
-        onPressed: func1,
-        elevation: 2.0,
-        fillColor: Colors.white,
+      child: AnimatedBuilder(
+        animation: _colorController,
+        builder: (context, child) {
+          return RawMaterialButton(
+            onPressed: func1,
+            elevation: 2.0,
+            fillColor: colorScheme == "dark"
+                ? darkBackground.evaluate(
+                    AlwaysStoppedAnimation(_colorController.value),
+                  )
+                : lightBackground.evaluate(
+                    AlwaysStoppedAnimation(_colorController.value),
+                  ),
+            child: child,
+            padding: EdgeInsets.all(12.0),
+            shape: CircleBorder(),
+          );
+        },
         child: Icon(
           icons[0],
           size: 40.0,
-          color: Colors.black,
+          color: Colors.white,
         ),
-        padding: EdgeInsets.all(10.0),
-        shape: CircleBorder(),
       ),
     ),
   );
@@ -43,17 +58,29 @@ List<OverlayEntry> showOverlay(
     builder: (context) => Positioned(
       bottom: 0.24 * height,
       right: _animation2.value * width,
-      child: RawMaterialButton(
-        onPressed: func2,
-        elevation: 2.0,
-        fillColor: Colors.white,
+      child: AnimatedBuilder(
+        animation: _colorController,
+        builder: (context, child) {
+          return RawMaterialButton(
+            onPressed: func2,
+            elevation: 2.0,
+            fillColor: colorScheme == "dark"
+                ? darkBackground.evaluate(
+                    AlwaysStoppedAnimation(_colorController.value),
+                  )
+                : lightBackground.evaluate(
+                    AlwaysStoppedAnimation(_colorController.value),
+                  ),
+            child: child,
+            padding: EdgeInsets.all(12.0),
+            shape: CircleBorder(),
+          );
+        },
         child: Icon(
           icons[1],
           size: 40.0,
-          color: Colors.black,
+          color: Colors.white,
         ),
-        padding: EdgeInsets.all(10.0),
-        shape: CircleBorder(),
       ),
     ),
   );
@@ -63,27 +90,34 @@ List<OverlayEntry> showOverlay(
     builder: (context) => Positioned(
       bottom: 0.36 * height,
       right: _animation3.value * width,
-      child: RawMaterialButton(
-        onPressed: func3,
-        // () {
-        //   setState(() {
-        //     photoMode = !photoMode;
-        //   });
-        // },
-        elevation: 2.0,
-        fillColor: Colors.white,
+      child: AnimatedBuilder(
+        animation: _colorController,
+        builder: (context, child) {
+          return RawMaterialButton(
+            onPressed: func3,
+            elevation: 2.0,
+            fillColor: colorScheme == "dark"
+                ? darkBackground.evaluate(
+                    AlwaysStoppedAnimation(_colorController.value),
+                  )
+                : lightBackground.evaluate(
+                    AlwaysStoppedAnimation(_colorController.value),
+                  ),
+            child: child,
+            padding: EdgeInsets.all(12.0),
+            shape: CircleBorder(),
+          );
+        },
         child: Icon(
           icons[2],
           size: 40.0,
-          color: Colors.black,
+          color: Colors.white,
         ),
-        padding: EdgeInsets.all(10.0),
-        shape: CircleBorder(),
       ),
     ),
   );
 
-  controller.addListener(() {
+  _positionController.addListener(() {
     overlayState.setState(() {});
   });
 
@@ -91,19 +125,51 @@ List<OverlayEntry> showOverlay(
   overlayState.insert(overlayEntry2);
   overlayState.insert(overlayEntry3);
 
-  controller.forward();
+  _positionController.forward();
 
   return [overlayEntry1, overlayEntry2, overlayEntry3];
 }
 
-removeOverlay(
-    context, AnimationController controller, List<OverlayEntry> entries) {
+removeOverlay(AnimationController controller, List<OverlayEntry> entries) {
+  print("removing overlay");
+
   controller.reverse().whenComplete(() {
     for (var entry in entries) {
       entry.remove();
     }
-    // overlayEntry1.remove();
-    // overlayEntry2.remove();
-    // overlayEntry3.remove();
   });
 }
+
+Animatable<Color> darkBackground = TweenSequence<Color>([
+  TweenSequenceItem(
+    weight: 1.0,
+    tween: ColorTween(
+      begin: Colors.blue[400],
+      end: Colors.indigo[900],
+    ),
+  ),
+  TweenSequenceItem(
+    weight: 1.0,
+    tween: ColorTween(
+      begin: Colors.indigo[900],
+      end: Colors.blue[400],
+    ),
+  ),
+]);
+
+Animatable<Color> lightBackground = TweenSequence<Color>([
+  TweenSequenceItem(
+    weight: 1.0,
+    tween: ColorTween(
+      begin: Colors.grey[500],
+      end: Colors.grey[900],
+    ),
+  ),
+  TweenSequenceItem(
+    weight: 1.0,
+    tween: ColorTween(
+      begin: Colors.grey[900],
+      end: Colors.grey[500],
+    ),
+  ),
+]);
