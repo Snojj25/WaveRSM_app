@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:forex_app/models/post.dart';
+import 'package:forex_app/screens/active_posts/active_posts_utils/description_container.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:forex_app/services/database.service.dart';
 import 'package:forex_app/shared/bottom_nav_bar.dart';
+import 'package:forex_app/shared/errors.dart';
 
 class ActivePosts extends StatefulWidget {
   ActivePosts({Key key}) : super(key: key);
@@ -10,17 +14,38 @@ class ActivePosts extends StatefulWidget {
 }
 
 class _ActivePostsState extends State<ActivePosts> {
+  bool isLoading = true;
+
   int activeIndex = 0;
+  List<Post> _activePosts = [];
+
+  final _dbService = DataBaseService();
+
+  @override
+  void initState() {
+    _dbService.getActivePosts().then((activePosts) {
+      _activePosts = activePosts;
+    }).catchError((err) {
+      showErrorDialog(context, err, "dark");
+    }).whenComplete(() {
+      setState(() {
+        isLoading = false;
+      });
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: NestedScrollView(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
               expandedHeight: 250,
-              floating: false,
+              floating: true,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
@@ -51,114 +76,107 @@ class _ActivePostsState extends State<ActivePosts> {
             ),
           ];
         },
-        body: Container(
-          padding: EdgeInsets.only(top: 50),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.black,
-                Colors.indigo[900],
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[700],
-                    boxShadow: [
-                      BoxShadow(color: Colors.yellow[600], blurRadius: 1),
+        body: isLoading == true
+            ? CircularProgressIndicator()
+            : Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black,
+                      Colors.indigo[900],
                     ],
-                  ),
-                  child: Wrap(
-                    children: [
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          aspectRatio: 4 / 3,
-                          viewportFraction: 1,
-                          initialPage: 0,
-                          enableInfiniteScroll: true,
-                          reverse: false,
-                          autoPlay: true,
-                          autoPlayInterval: Duration(seconds: 5),
-                          autoPlayAnimationDuration:
-                              Duration(milliseconds: 800),
-                          autoPlayCurve: Curves.easeInCubic,
-                          enlargeCenterPage: true,
-                          scrollDirection: Axis.horizontal,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              activeIndex = index;
-                            });
-                            print("index: " + index.toString());
-                            print("reason: " + reason.toString());
-                          },
-                        ),
-                        items: [
-                          Container(
-                            child: Image(
-                              image: AssetImage(
-                                  "assets/stock_photos/stock_image1.jpg"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                          Container(
-                            child: Image(
-                              image: AssetImage(
-                                  "assets/stock_photos/stock_image4.jpg"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                          Container(
-                            child: Image(
-                              image: AssetImage(
-                                  "assets/stock_photos/stock_image5.jpg"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                          Container(
-                            child: Image(
-                              image: AssetImage(
-                                  "assets/stock_photos/stock_image8.jpg"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                          Container(
-                            child: Image(
-                              image: AssetImage(
-                                  "assets/stock_photos/stock_image9.jpg"),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(2),
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.black45,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          activeIndex.toString() +
-                              " " +
-                              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.w400),
-                          textScaleFactor: 1.3,
-                        ),
-                      ),
-                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Wrap(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.only(top: 20),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[700],
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.yellow[600], blurRadius: 1),
+                                ],
+                              ),
+                              child: CarouselSlider(
+                                options: CarouselOptions(
+                                  aspectRatio: 4 / 3,
+                                  viewportFraction: 1,
+                                  initialPage: 0,
+                                  enableInfiniteScroll: true,
+                                  reverse: false,
+                                  autoPlay: true,
+                                  autoPlayInterval: Duration(seconds: 20),
+                                  autoPlayAnimationDuration:
+                                      Duration(milliseconds: 800),
+                                  autoPlayCurve: Curves.easeInCubic,
+                                  enlargeCenterPage: true,
+                                  scrollDirection: Axis.horizontal,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      activeIndex = index;
+                                    });
+                                    print("index: " + index.toString());
+                                    print("reason: " + reason.toString());
+                                  },
+                                ),
+                                items: [
+                                  Container(
+                                    child: Image(
+                                      image:
+                                          NetworkImage(_activePosts[0].imgUrl),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Image(
+                                      image:
+                                          NetworkImage(_activePosts[1].imgUrl),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Image(
+                                      image:
+                                          NetworkImage(_activePosts[2].imgUrl),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Image(
+                                      image:
+                                          NetworkImage(_activePosts[0].imgUrl),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Image(
+                                      image:
+                                          NetworkImage(_activePosts[1].imgUrl),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(height: 40, color: Colors.grey[700]),
+                            ActiveTradesDescriptionContainer(
+                              activeIdx: activeIndex,
+                              activePosts: _activePosts,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
       ),
       bottomNavigationBar: BottomNavBar(colorScheme: "dark", activeIdx: 1),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

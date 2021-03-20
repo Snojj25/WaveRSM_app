@@ -1,3 +1,5 @@
+// import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:global_configuration/global_configuration.dart';
 
@@ -178,6 +180,91 @@ class DataBaseService {
       "dateTime": dateTime,
       "symbol": symbol,
     });
+  }
+
+  // TODO FINISH FUNCTIONS
+  Future<void> setActive(String uid, String mode) async {
+    if (mode == "photos") {
+      postsCollection
+          .document("photos")
+          .collection("posts")
+          .document(uid)
+          .updateData({"active": true}).catchError((err) {
+        print("error in setActive()");
+        print(err);
+      });
+    } else {
+      postsCollection
+          .document("videos")
+          .collection("posts")
+          .document(uid)
+          .updateData({"active": true}).catchError((err) {
+        print("error in setActive()");
+        print(err);
+      });
+    }
+  }
+
+  Future<void> removeActive(String uid, String mode) async {
+    if (mode == "photos") {
+      postsCollection
+          .document("photos")
+          .collection("posts")
+          .document(uid)
+          .updateData({"active": false}).catchError((err) {
+        print("error in setActive()");
+        print(err);
+      });
+    } else {
+      postsCollection
+          .document("videos")
+          .collection("posts")
+          .document(uid)
+          .updateData({"active": false}).catchError((err) {
+        print("error in setActive()");
+        print(err);
+      });
+    }
+  }
+
+  Future<List<Post>> getActivePosts() async {
+    return await postsCollection
+        .document("photos")
+        .collection("posts")
+        .where("active", isEqualTo: true)
+        // .snapshots()
+        // .map(_postsFromSnapshot);
+
+        .getDocuments()
+        .then((snapshot) {
+      List<Post> activePosts = [];
+      snapshot.documents.forEach((doc) {
+        final Post post = Post(
+          id: doc.data["id"],
+          title: doc.data["title"],
+          description: doc.data["description"],
+          imgUrl: doc.data["imgUrl"],
+          dateTime: (doc.data["dateTime"] as Timestamp).toDate(),
+          symbol: doc.data["symbol"],
+        );
+        activePosts.add(post);
+      });
+      return activePosts;
+    });
+    //     .then((documents) {
+    //   print("5");
+    //   return documents.documents.map((doc) {
+    //     print("6");
+    //     return Post(
+    //       id: doc.data["id"],
+    //       title: doc.data["title"],
+    //       description: doc.data["description"],
+    //       imgUrl: doc.data["imgUrl"],
+    //       dateTime: (doc.data["dateTime"] as Timestamp).toDate(),
+    //       symbol: doc.data["symbol"],
+    //     );
+    //   });
+    // });
   }
 
   List<Post> _postsFromSnapshot(QuerySnapshot snapshot) {
