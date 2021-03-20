@@ -1,6 +1,7 @@
 // import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:forex_app/screens/authenticate/login_screen.dart';
 import 'package:global_configuration/global_configuration.dart';
 
 import '../models/trade.model.dart';
@@ -182,7 +183,7 @@ class DataBaseService {
     });
   }
 
-  // TODO FINISH FUNCTIONS
+  // ? ACTIVE POSTS FUNCTIONS ===================================
   Future<void> setActive(String uid, String mode) async {
     if (mode == "photos") {
       postsCollection
@@ -232,13 +233,12 @@ class DataBaseService {
         .document("photos")
         .collection("posts")
         .where("active", isEqualTo: true)
-        // .snapshots()
-        // .map(_postsFromSnapshot);
-
+        .orderBy('dateTime', descending: true)
         .getDocuments()
         .then((snapshot) {
       List<Post> activePosts = [];
       snapshot.documents.forEach((doc) {
+        print("date: " + (doc.data["dateTime"] as Timestamp).toString());
         final Post post = Post(
           id: doc.data["id"],
           title: doc.data["title"],
@@ -250,22 +250,45 @@ class DataBaseService {
         activePosts.add(post);
       });
       return activePosts;
+    }).catchError((err) {
+      print("error occured 1234");
+      print(err);
     });
-    //     .then((documents) {
-    //   print("5");
-    //   return documents.documents.map((doc) {
-    //     print("6");
-    //     return Post(
-    //       id: doc.data["id"],
-    //       title: doc.data["title"],
-    //       description: doc.data["description"],
-    //       imgUrl: doc.data["imgUrl"],
-    //       dateTime: (doc.data["dateTime"] as Timestamp).toDate(),
-    //       symbol: doc.data["symbol"],
-    //     );
-    //   });
-    // });
   }
+
+  Future<bool> checkIfActive(String uid, String mode) {
+    if (mode == "photos") {
+      return postsCollection
+          .document("photos")
+          .collection("posts")
+          .document(uid)
+          .snapshots()
+          .first
+          .then((docSnapshot) {
+        return (docSnapshot.data["active"] as bool) ?? false;
+      }).catchError((err) {
+        print("error in checkIfActive()");
+        throw (err);
+      });
+    } else {
+      return postsCollection
+          .document("videos")
+          .collection("posts")
+          .document(uid)
+          .snapshots()
+          .first
+          .then((docSnapshot) {
+        return (docSnapshot.data["active"] as bool) ?? false;
+      }).catchError((err) {
+        print("error in checkIfActive()");
+        throw (err);
+      });
+    }
+  }
+
+  // ? ACTIVE POSTS FUNCTIONS ===================================
+
+  // =============================================================
 
   List<Post> _postsFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {

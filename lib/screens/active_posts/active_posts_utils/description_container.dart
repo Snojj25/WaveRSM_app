@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:forex_app/models/post.dart';
-import 'package:forex_app/screens/active_posts/edit-active/edit_active.dart';
 import 'package:forex_app/screens/posts/post-detail/photo_post_detail.dart';
 
 class ActiveTradesDescriptionContainer extends StatelessWidget {

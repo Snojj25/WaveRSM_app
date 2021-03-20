@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       : [Colors.grey[500], Colors.white],
                 ),
               ),
-              child: !photoMode
+              child: photoMode
                   ? HomeScreenPhotos(colorScheme: colorScheme)
                   : HomeScreenVideos(colorScheme: colorScheme),
             ),

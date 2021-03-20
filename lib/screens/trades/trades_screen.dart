@@ -143,7 +143,7 @@ class _TradesScreenState extends State<TradesScreen>
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.details),
+            icon: Icon(Icons.stacked_bar_chart),
             onPressed: () {
               Navigator.of(context)
                   .push(
