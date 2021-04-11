@@ -61,19 +61,22 @@ List<OverlayEntry> showOverlay(
       child: AnimatedBuilder(
         animation: _colorController,
         builder: (context, child) {
-          return RawMaterialButton(
-            onPressed: func2,
-            elevation: 2.0,
-            fillColor: colorScheme == "dark"
-                ? darkBackground.evaluate(
-                    AlwaysStoppedAnimation(_colorController.value),
-                  )
-                : lightBackground.evaluate(
-                    AlwaysStoppedAnimation(_colorController.value),
-                  ),
-            child: child,
-            padding: EdgeInsets.all(12.0),
-            shape: CircleBorder(),
+          return Tooltip(
+            message: "this is a tooltip",
+            child: RawMaterialButton(
+              onPressed: func2,
+              elevation: 2.0,
+              fillColor: colorScheme == "dark"
+                  ? darkBackground.evaluate(
+                      AlwaysStoppedAnimation(_colorController.value),
+                    )
+                  : lightBackground.evaluate(
+                      AlwaysStoppedAnimation(_colorController.value),
+                    ),
+              child: child,
+              padding: EdgeInsets.all(12.0),
+              shape: CircleBorder(),
+            ),
           );
         },
         child: Icon(

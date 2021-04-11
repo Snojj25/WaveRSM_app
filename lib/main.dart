@@ -26,18 +26,27 @@ class MyApp extends StatelessWidget {
       providers: [
         StreamProvider<User>.value(
           value: AuthService().user,
+          initialData: null,
         ),
         StreamProvider<List<Trade>>.value(
           value: DataBaseService().trades,
+          initialData: null,
         ),
-        StreamProvider<UserData>.value(
-          value: DataBaseService().userData,
-        ),
+        // StreamProvider<UserData>.value(
+        //   value: DataBaseService().userData,
+        //   initialData: null,
+        // ),
         StreamProvider<List<Post>>.value(
           value: DataBaseService().videoPosts,
+          initialData: null,
         ),
         StreamProvider<List<Post>>.value(
           value: DataBaseService().photoPosts,
+          initialData: null,
+        ),
+        StreamProvider<UserData>.value(
+          initialData: null,
+          value: DataBaseService().userData,
         ),
       ],
       child: Platform.isAndroid

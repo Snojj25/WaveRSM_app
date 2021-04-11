@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:forex_app/services/auth.service.dart';
+import 'package:provider/provider.dart';
+import 'package:full_screen_image/full_screen_image.dart';
+
+import 'package:forex_app/models/user.dart';
+// import 'package:forex_app/services/auth.service.dart';
 import 'package:forex_app/services/database.service.dart';
 import 'package:forex_app/shared/errors.dart';
-import 'package:full_screen_image/full_screen_image.dart';
 
 import '../../../models/post.dart';
 
@@ -11,6 +16,7 @@ class PhotoDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UserData userData = Provider.of<UserData>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text("Post Detail"),
@@ -65,7 +71,9 @@ class PhotoDetailScreen extends StatelessWidget {
               ),
               ButtonBar(
                 children: [
-                  SetActiveButton(post: post, mode: "photos"),
+                  AuthService().allowEditor(userData)
+                      ? SetActiveButton(post: post, mode: "photos")
+                      : Text("hello"),
                 ],
               ),
               SizedBox(height: 30),
@@ -130,7 +138,7 @@ class _SetActiveButtonState extends State<SetActiveButton>
         child: AnimatedBuilder(
           animation: _controller,
           builder: (context, child) => IconButton(
-            padding: EdgeInsets.only(left: 0.9 * _animation.value),
+            padding: EdgeInsets.only(left: 1.2 * _animation.value),
             iconSize: 40 + _animation.value,
             icon: Icon(
               _isActive ? Icons.star_rounded : Icons.star_outline_rounded,
