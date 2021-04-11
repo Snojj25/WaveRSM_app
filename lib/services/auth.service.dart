@@ -14,6 +14,7 @@ class AuthService {
     return _auth.onAuthStateChanged.map(_userFromFirebaseUser);
   }
 
+  // ? =====================================================================
   Future<User> signInWithEmailAndPassword(String email, String password) async {
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(
@@ -48,5 +49,32 @@ class AuthService {
       print("Error signing out: " + err.toString());
       return null;
     }
+  }
+
+  // ! =====================================================-
+
+  bool checkAuthorization(UserData user, List<Roles> roles) {
+    if (user == null) return false;
+    for (var role in roles) {
+      if (user.roles.contains(role)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool allowSubscriber(UserData user) {
+    const allowed = [Roles.subscriber, Roles.editor, Roles.admin];
+    return this.checkAuthorization(user, allowed);
+  }
+
+  bool allowEditor(UserData user) {
+    const allowed = [Roles.editor, Roles.admin];
+    return this.checkAuthorization(user, allowed);
+  }
+
+  bool allowAdmin(UserData user) {
+    const allowed = [Roles.admin];
+    return this.checkAuthorization(user, allowed);
   }
 }

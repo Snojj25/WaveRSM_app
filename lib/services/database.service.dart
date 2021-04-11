@@ -1,7 +1,6 @@
 // import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:forex_app/screens/authenticate/login_screen.dart';
 import 'package:global_configuration/global_configuration.dart';
 
 import '../models/trade.model.dart';
@@ -34,6 +33,20 @@ class DataBaseService {
         )
         .catchError((err) => {
               print("error: " + err.toString()),
+            });
+  }
+
+  Future<void> editTrade(Trade trade, String uid, dynamic data) async {
+    return await tradesCollection
+        .document("userTrades")
+        .collection(uid)
+        .document(trade.symbol + trade.dateTime.toIso8601String())
+        .updateData(data)
+        .then((_) {
+      print("Trade update successful");
+    }).catchError((err) => {
+              print("error: " + err.toString()),
+              throw err,
             });
   }
 
@@ -140,6 +153,22 @@ class DataBaseService {
           .setData(initTradeStats),
     );
   }
+
+  // List<UserData> _userDataFromSnapshot(QuerySnapshot snapshot) {
+  //   final String userUid = GlobalConfiguration().getString("uid");
+  //   return snapshot.documents
+  //       .where((element) => element.data["uid"] == userUid)
+  //       .map((doc) {
+  //     //Timestamp timestamp = doc.data["date"];
+  //     return UserData(
+  //       uid: doc.documentID,
+  //       name: doc.data["name"],
+  //       email: doc.data["email"],
+  //       password: doc.data["password"],
+  //       imageUrl: doc.data["imageUrl"],
+  //     );
+  //   }).toList();
+  // }
 
   UserData _userDataFromSnapshot(QuerySnapshot snapshot) {
     final String userUid = GlobalConfiguration().getValue("uid");

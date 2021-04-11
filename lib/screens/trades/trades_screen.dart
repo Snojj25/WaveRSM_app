@@ -7,7 +7,7 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:provider/provider.dart';
 
 import './trades-screen-helpers/all_trades.dart';
-import './trades-screen-helpers/image_labeler.dart' as img_labeler;
+import 'trades-screen-helpers/image-labeler/image_labeler.dart' as img_labeler;
 import '../../services/database.service.dart';
 import '../../models/trade.model.dart';
 import './trade_stats/trade_stats_screen.dart';
@@ -124,7 +124,7 @@ class _TradesScreenState extends State<TradesScreen>
 
   @override
   Widget build(BuildContext context) {
-    final UserData userData = Provider.of<UserData>(context);
+    final UserData userData = Provider.of<UserData>(context, listen: false);
     return Scaffold(
       // backgroundColor: Colors.red,
       appBar: AppBar(

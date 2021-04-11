@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-showErrorDialog(BuildContext context, String error, String colorScheme) {
+showErrorDialog(BuildContext context, dynamic error, String colorScheme) {
   showGeneralDialog(
     transitionBuilder: (context, a1, a2, widget) {
       return Transform.scale(
@@ -31,7 +31,7 @@ showErrorDialog(BuildContext context, String error, String colorScheme) {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    error,
+                    error.toString(),
                     style: TextStyle(
                       color:
                           colorScheme == "dark" ? Colors.black : Colors.white,
